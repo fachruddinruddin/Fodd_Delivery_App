@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import '../models/menu_model.dart';
 import '../models/transaction_model.dart';
 
@@ -22,24 +21,19 @@ class FirestoreService {
     }
   }
 
-  // Mengambil menu dari Firestore
+  // Mengambil daftar menu dari Firestore
   Future<List<MenuModel>> getMenus() async {
     try {
       var snapshot = await _db.collection('menus').get();
-      var data = snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-      print('Received data: $data');
-      return snapshot.docs
-          .map((doc) =>
-              MenuModel.fromMap(doc.id, doc.data() as Map<String, dynamic>))
-          .toList();
+      return snapshot.docs.map((doc) {
+        return MenuModel.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
     } catch (e) {
       throw Exception('Failed to load menus: $e');
     }
   }
 
-  // Mengupdate menu
+  // Memperbarui menu
   Future<void> updateMenu(String id, String name, String description,
       double price, int stock) async {
     try {
@@ -64,7 +58,7 @@ class FirestoreService {
     }
   }
 
-  // Membuat transaksi
+  // Membuat transaksi baru
   Future<void> createTransaction(String userId,
       List<Map<String, dynamic>> items, double totalPrice) async {
     try {
@@ -76,7 +70,7 @@ class FirestoreService {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      // Update status transaksi (misalnya jadi completed setelah proses berhasil)
+      // Simulasi perubahan status transaksi menjadi 'completed'
       await _db.collection('transactions').doc(transactionRef.id).update({
         'status': 'completed',
       });
@@ -85,23 +79,33 @@ class FirestoreService {
     }
   }
 
-  // Menambahkan transaksi untuk pengguna (untuk melihat data transaksi)
+  // Mengambil transaksi berdasarkan userId
   Future<List<TransactionModel>> getTransactions(String userId) async {
     try {
       var snapshot = await _db
           .collection('transactions')
           .where('userId', isEqualTo: userId)
+          .orderBy('timestamp', descending: true)
           .get();
-      var data = snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-      print('Received data: $data');
-      return snapshot.docs
-          .map((doc) => TransactionModel.fromMap(
-              doc.id, doc.data() as Map<String, dynamic>))
-          .toList();
+
+      return snapshot.docs.map((doc) {
+        return TransactionModel.fromMap(
+            doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
     } catch (e) {
       throw Exception('Failed to load transactions: $e');
+    }
+  }
+
+  // Method to create the required Firestore index programmatically
+  Future<void> createIndex() async {
+    try {
+      await _db.collection('transactions').add({
+        'userId': 'exampleUserId',
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('Failed to create index: $e');
     }
   }
 }

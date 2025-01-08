@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
+import '../widgets/custom_button.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -8,49 +9,99 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = AuthService().getCurrentUser();
+    final primaryColor = Color(0xFF2E5077);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profile", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.deepOrange,
+        title: Center(
+          child: const Text(
+            'Profile',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+        backgroundColor: primaryColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/profile.png'),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Text(
-              "Username: ${user?.displayName ?? 'N/A'}",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              "Email: ${user?.email ?? 'N/A'}",
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                  textStyle: const TextStyle(fontSize: 18),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage('assets/images/profile.jpg'),
                 ),
-                onPressed: () async {
-                  await AuthService().logout();
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-                child: const Text("Logout", style: TextStyle(color: Colors.white)),
-              ),
+                const SizedBox(height: 20),
+                const Text(
+                  'My Profile',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.phone, color: primaryColor),
+                    title: Text(
+                      user?.phoneNumber ?? '0897654312',
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.email, color: primaryColor),
+                    title: Text(
+                      user?.email ?? 'N/A',
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () async {
+                    await AuthService().logout();
+                    Navigator.pushReplacementNamed(context, '/login');
+                  },
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -42,15 +42,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       User? user = await authService.registerWithEmailPassword(
         _emailController.text,
         _passwordController.text,
-        _usernameController.text, // Mengirim username ke service
+        _usernameController.text,
       );
-  
+
       setState(() {
         _isLoading = false;
       });
 
       if (user != null) {
-        Navigator.pushReplacementNamed(context, '/login'); // Navigate to login screen
+        Navigator.pushReplacementNamed(context, '/login');
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Registration failed')));
@@ -61,77 +61,117 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              CustomTextField(
-                controller: _usernameController,
-                labelText: 'Username',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  return null;
-                },
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2E5077), Color(0xFF2E5077)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
               ),
-              SizedBox(height: 16),
-              CustomTextField(
-                controller: _emailController,
-                labelText: 'Email',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
+              elevation: 8.0,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 16),
+                      Image.asset(
+                        'assets/images/profile.jpg',
+                        width: 90,
+                        height: 90,
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Register',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      CustomTextField(
+                        controller: _usernameController,
+                        labelText: 'Username',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your username';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextField(
+                        controller: _emailController,
+                        labelText: 'Email',
+                        inputType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextField(
+                        controller: _passwordController,
+                        labelText: 'Password',
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextField(
+                        controller: _confirmPasswordController,
+                        labelText: 'Confirm Password',
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please confirm your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : CustomButton(
+                              label: 'Register',
+                              onPressed: _register,
+                            ),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.pushReplacementNamed(context, '/login'),
+                        child: const Text(
+                          'Already have an account? Login',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              SizedBox(height: 16),
-              CustomTextField(
-                controller: _passwordController,
-                labelText: 'Password',
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters long';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              CustomTextField(
-                controller: _confirmPasswordController,
-                labelText: 'Confirm Password',
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please confirm your password';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 24),
-              _isLoading
-                  ? CircularProgressIndicator()
-                  : CustomButton(
-                      label: 'Register',
-                      onPressed: _register,
-                    ),
-              TextButton(
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, '/login'),
-                child: Text('Already have an account? Login'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

@@ -16,8 +16,6 @@ void main() async {
   runApp(MyApp());
 }
 
-
-
 class MyApp extends StatelessWidget {
   final someMenu = MenuModel(
     id: '1',
@@ -30,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter App',
+      title: 'Food Delivery App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
