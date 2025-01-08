@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      
+
       String message = 'An error occurred';
       switch (e.code) {
         case 'user-not-found':
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         default:
           message = e.message ?? 'Login failed. Please try again.';
       }
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
       );
@@ -88,52 +88,88 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomTextField(
-                controller: _emailController,
-                labelText: 'Email',
-                inputType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2E5077), Color(0xFF2E5077)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
               ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                controller: _passwordController,
-                labelText: 'Password',
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
+              elevation: 8.0,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 16),
+                      Image.asset(
+                        'assets/images/profile.jpg',
+                        width: 90,
+                        height: 90,
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      CustomTextField(
+                        controller: _emailController,
+                        labelText: 'Email',
+                        inputType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextField(
+                        controller: _passwordController,
+                        labelText: 'Password',
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : CustomButton(
+                              label: 'Login',
+                              onPressed: _login,
+                            ),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: () => Navigator.pushReplacementNamed(
+                            context, '/register'),
+                        child: const Text('Don\'t have an account? Register'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 24),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : CustomButton(
-                      label: 'Login',
-                      onPressed: _login,
-                    ),
-              TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
-                child: const Text('Don\'t have an account? Register'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
