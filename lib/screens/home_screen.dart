@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            "Food Delivery App",
+            "Food Cashier App",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

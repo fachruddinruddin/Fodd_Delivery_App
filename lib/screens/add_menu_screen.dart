@@ -33,7 +33,7 @@ class _AddMenuScreenState extends State<AddMenuScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Add Menu',
+          'Tambah Menu',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFFD84040),
