@@ -9,7 +9,6 @@ import 'screens/add_menu_screen.dart';
 import 'screens/transaction_screen.dart';
 import 'firebase_options.dart';
 
-// main.dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

@@ -81,6 +81,24 @@ class HistoryScreen extends StatelessWidget {
                                 "Timestamp: ${DateFormat('yyyy-MM-dd – kk:mm').format(transaction.timestamp)}",
                                 style: const TextStyle(fontSize: 12),
                               ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "Items:",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              ...transaction.items.map((item) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text(
+                                    "Menu ID: ${item['menuId']}, Quantity: ${item['quantity']}, Total: Rp. ${item['total']}",
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                );
+                              }).toList(),
                             ],
                           ),
                         ),

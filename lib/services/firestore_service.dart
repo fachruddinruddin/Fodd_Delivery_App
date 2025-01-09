@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/menu_model.dart';
 import '../models/transaction_model.dart';
+import '../models/user_model.dart'; // Pastikan Anda punya model untuk User
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -62,8 +64,11 @@ class FirestoreService {
   Future<void> createTransaction(String userId,
       List<Map<String, dynamic>> items, double totalPrice) async {
     try {
+      // Ambil ID pengguna yang sedang login (menggunakan Firebase Authentication)
+      String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? userId;
+
       var transactionRef = await _db.collection('transactions').add({
-        'userId': userId,
+        'userId': currentUserId, // Pastikan ID pengguna yang benar dikirim
         'items': items,
         'totalPrice': totalPrice,
         'status': 'pending',
@@ -82,17 +87,23 @@ class FirestoreService {
   // Mengambil transaksi berdasarkan userId
   Future<List<TransactionModel>> getTransactions(String userId) async {
     try {
+      print('Fetching transactions for userId: $userId');
       var snapshot = await _db
           .collection('transactions')
           .where('userId', isEqualTo: userId)
           .orderBy('timestamp', descending: true)
           .get();
 
+      if (snapshot.docs.isEmpty) {
+        print('No transactions found for userId: $userId');
+      }
+
       return snapshot.docs.map((doc) {
         return TransactionModel.fromMap(
             doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
+      print('Error fetching transactions: $e');
       throw Exception('Failed to load transactions: $e');
     }
   }
