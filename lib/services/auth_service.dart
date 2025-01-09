@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'sqlite_helper.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SQLiteHelper _sqliteHelper = SQLiteHelper.instance;
 
   // Login dengan email dan password
   Future<User?> loginWithEmailPassword(String email, String password) async {
@@ -21,8 +23,14 @@ class AuthService {
             .collection('users')
             .doc(user.uid)
             .get();
-        
+
         if (userData.exists) {
+          var data = userData.data() as Map<String, dynamic>;
+          await _sqliteHelper.insertUser(
+            user.uid,
+            data['username'] ?? '',
+            data['email'] ?? '',
+          );
           return user;
         } else {
           throw Exception('Data pengguna tidak ditemukan');
@@ -60,7 +68,7 @@ class AuthService {
         email: email,
         password: password,
       );
-      
+
       final User? user = userCredential.user;
 
       if (user != null) {
@@ -69,6 +77,12 @@ class AuthService {
           'username': username,
           'createdAt': FieldValue.serverTimestamp(),
         });
+
+        await _sqliteHelper.insertUser(
+          user.uid,
+          username,
+          email,
+        );
       }
 
       return user;

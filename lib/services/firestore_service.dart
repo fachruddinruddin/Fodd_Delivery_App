@@ -3,20 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/menu_model.dart';
 import '../models/transaction_model.dart';
 import '../models/user_model.dart'; // Pastikan Anda punya model untuk User
+import 'sqlite_helper.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final SQLiteHelper _sqliteHelper = SQLiteHelper.instance;
 
   // Menambahkan menu baru
-  Future<void> addMenu(
-      String name, String description, double price) async {
+  Future<void> addMenu(String name, String description, double price) async {
     try {
-      await _db.collection('menus').add({
+      var menuRef = await _db.collection('menus').add({
         'name': name,
         'description': description,
         'price': price,
         'createdAt': FieldValue.serverTimestamp(),
       });
+      await _sqliteHelper.insertMenu(menuRef.id, name, description, price);
     } catch (e) {
       throw Exception('Failed to add menu: $e');
     }
@@ -34,9 +36,13 @@ class FirestoreService {
     }
   }
 
+  // Mengambil daftar menu dari SQLite (offline)
+  Future<List<Map<String, dynamic>>> getMenusOffline() async {
+    return await _sqliteHelper.getMenus();
+  }
+
   // Memperbarui menu
-  Future<void> updateMenu(String id, String name, String description,
-      double price) async {
+  Future<void> updateMenu(String id, String name, String description, double price) async {
     try {
       await _db.collection('menus').doc(id).update({
         'name': name,
@@ -44,6 +50,7 @@ class FirestoreService {
         'price': price,
         'updatedAt': FieldValue.serverTimestamp(),
       });
+      await _sqliteHelper.updateMenu(id, name, description, price);
     } catch (e) {
       throw Exception('Failed to update menu: $e');
     }
@@ -53,14 +60,14 @@ class FirestoreService {
   Future<void> deleteMenu(String id) async {
     try {
       await _db.collection('menus').doc(id).delete();
+      await _sqliteHelper.deleteMenu(id);
     } catch (e) {
       throw Exception('Failed to delete menu: $e');
     }
   }
 
   // Membuat transaksi baru
-  Future<void> createTransaction(String userId,
-      List<Map<String, dynamic>> items, double totalPrice) async {
+  Future<void> createTransaction(String userId, List<Map<String, dynamic>> items, double totalPrice) async {
     try {
       // Ambil ID pengguna yang sedang login (menggunakan Firebase Authentication)
       String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? userId;
@@ -77,6 +84,15 @@ class FirestoreService {
       await _db.collection('transactions').doc(transactionRef.id).update({
         'status': 'completed',
       });
+
+      await _sqliteHelper.insertTransaction(
+        transactionRef.id,
+        currentUserId,
+        items.toString(),
+        totalPrice,
+        'completed',
+        DateTime.now().toIso8601String(),
+      );
     } catch (e) {
       throw Exception('Failed to create transaction: $e');
     }
@@ -104,6 +120,11 @@ class FirestoreService {
       print('Error fetching transactions: $e');
       throw Exception('Failed to load transactions: $e');
     }
+  }
+
+  // Mengambil transaksi dari SQLite (offline)
+  Future<List<Map<String, dynamic>>> getTransactionsOffline(String userId) async {
+    return await _sqliteHelper.getTransactions(userId);
   }
 
   // Method to create the required Firestore index programmatically
