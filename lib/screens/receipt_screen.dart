@@ -20,12 +20,15 @@ class ReceiptScreen extends StatelessWidget {
         const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
     final TextStyle normalTextStyle = const TextStyle(fontSize: 16);
     final TextStyle totalTextStyle = const TextStyle(
-        fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green);
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Nota Anda", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: const Color(0xFFD84040),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
         child: Container(
@@ -36,8 +39,7 @@ class ReceiptScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color:
-                    const Color.fromARGB(255, 186, 186, 186).withOpacity(0.5),
+                color: Colors.black.withOpacity(0.1),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: const Offset(0, 3),
@@ -48,8 +50,8 @@ class ReceiptScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Pesanan Anda", style: boldTextStyle),
-              const Divider(color: Colors.deepOrange),
+              Text("Pesanan Anda", style: boldTextStyle.copyWith(fontSize: 22)),
+              const Divider(color: Color(0xFFD84040)),
               const SizedBox(height: 10),
               Text(menu.name, style: normalTextStyle),
               const SizedBox(height: 5),
@@ -64,7 +66,7 @@ class ReceiptScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
+                  backgroundColor: const Color(0xFFD84040),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   textStyle: const TextStyle(fontSize: 18),

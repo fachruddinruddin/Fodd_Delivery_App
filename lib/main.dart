@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
     name: 'Sample Menu',
     description: 'This is a sample menu description',
     price: 10.0,
-    stock: 100,
   );
 
   @override

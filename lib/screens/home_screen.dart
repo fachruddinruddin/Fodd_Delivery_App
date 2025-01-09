@@ -3,9 +3,9 @@ import '../services/firestore_service.dart';
 import '../models/menu_model.dart';
 import 'add_menu_screen.dart';
 import 'transaction_screen.dart';
-import 'update_menu_screen.dart'; // Import the update menu screen
-import 'history_screen.dart'; // Import the history screen
-import 'profile_screen.dart'; // Import the profile screen
+import 'update_menu_screen.dart';
+import 'history_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: const Color(0xFFD84040),
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -69,8 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepOrange,
+        selectedItemColor: Colors.black,
         onTap: _onItemTapped,
+        backgroundColor: Color(0xFFD84040),
+        unselectedItemColor: Colors.white,
       ),
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(
@@ -84,8 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 });
               },
-              child: const Icon(Icons.add, color: Colors.white),
-              backgroundColor: Colors.deepOrange,
+              child: const Icon(Icons.add,
+                  color: Color.fromARGB(255, 255, 255, 255)),
+              backgroundColor: Color(0xFFD84040),
             )
           : null,
     );
@@ -158,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(
                                   "\Rp.${menu.price}",
                                   style: const TextStyle(
-                                    color: Colors.deepOrange,
+                                    color: Color(0xFFD84040),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -169,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.edit,
-                                      color: Colors.blue),
+                                      color: Colors.black),
                                   onPressed: () {
                                     Navigator.push(
                                       context,
@@ -187,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete,
-                                      color: Colors.red),
+                                      color: Colors.black),
                                   onPressed: () async {
                                     await _firestoreService.deleteMenu(menu.id);
                                     setState(() {

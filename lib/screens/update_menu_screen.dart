@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
 import '../models/menu_model.dart';
-import '../widgets/custom_textfield.dart';
-import '../widgets/custom_button.dart';
 
 class UpdateMenuScreen extends StatefulWidget {
   final MenuModel menu;
@@ -19,7 +17,6 @@ class _UpdateMenuScreenState extends State<UpdateMenuScreen> {
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
-  late TextEditingController _stockController;
   bool _isLoading = false;
 
   @override
@@ -30,8 +27,6 @@ class _UpdateMenuScreenState extends State<UpdateMenuScreen> {
         TextEditingController(text: widget.menu.description);
     _priceController =
         TextEditingController(text: widget.menu.price.toString());
-    _stockController =
-        TextEditingController(text: widget.menu.stock.toString());
   }
 
   @override
@@ -39,7 +34,6 @@ class _UpdateMenuScreenState extends State<UpdateMenuScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _priceController.dispose();
-    _stockController.dispose();
     super.dispose();
   }
 
@@ -52,12 +46,10 @@ class _UpdateMenuScreenState extends State<UpdateMenuScreen> {
 
     try {
       await _firestoreService.updateMenu(
-        widget.menu.id,
-        _nameController.text.trim(),
-        _descriptionController.text.trim(),
-        double.parse(_priceController.text.trim()),
-        int.parse(_stockController.text.trim()),
-      );
+          widget.menu.id,
+          _nameController.text.trim(),
+          _descriptionController.text.trim(),
+          double.parse(_priceController.text.trim()));
 
       if (!mounted) return;
 
@@ -79,72 +71,119 @@ class _UpdateMenuScreenState extends State<UpdateMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Update Menu')),
+      appBar: AppBar(
+        title: const Text(
+          'Update Menu',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFFD84040),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              CustomTextField(
-                controller: _nameController,
-                labelText: 'Name',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                controller: _descriptionController,
-                labelText: 'Description',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the description';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                controller: _priceController,
-                labelText: 'Price',
-                inputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the price';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid price';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                controller: _stockController,
-                labelText: 'Stock',
-                inputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the stock';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid stock';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : CustomButton(
-                      label: 'Update',
-                      onPressed: _updateMenu,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    labelStyle:
+                        const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-            ],
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle:
+                        const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a description';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _priceController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Price',
+                    labelStyle:
+                        const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a price';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 32),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _updateMenu,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 84, 84, 84),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 32.0),
+                        ),
+                        child: const Text('Update Menu',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

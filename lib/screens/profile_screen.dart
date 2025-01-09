@@ -9,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = AuthService().getCurrentUser();
-    final primaryColor = Color(0xFF2E5077);
+    final primaryColor = Color(0xFFD84040);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
                 const Text(
                   'My Profile',
                   style: TextStyle(
-                      color: Colors.grey,
+                      color: Color.fromARGB(255, 0, 0, 0),
                       fontWeight: FontWeight.w500,
                       fontSize: 18),
                 ),
@@ -57,7 +57,8 @@ class ProfileScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListTile(
-                    leading: Icon(Icons.phone, color: primaryColor),
+                    leading:
+                        Icon(Icons.phone, color: Color.fromARGB(255, 0, 0, 0)),
                     title: Text(
                       user?.phoneNumber ?? '0897654312',
                       style: TextStyle(
@@ -74,7 +75,8 @@ class ProfileScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListTile(
-                    leading: Icon(Icons.email, color: primaryColor),
+                    leading:
+                        Icon(Icons.email, color: Color.fromARGB(255, 0, 0, 0)),
                     title: Text(
                       user?.email ?? 'N/A',
                       style: TextStyle(
@@ -87,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: const Color.fromARGB(255, 88, 88, 88),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 15),
                     shape: RoundedRectangleBorder(

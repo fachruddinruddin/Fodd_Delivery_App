@@ -14,17 +14,27 @@ class HistoryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Transaction History",
-          style: TextStyle(color: Colors.white),
+        title: const Center(
+          child: Text(
+            'Transaction History',
+            style: TextStyle(
+              color: Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
         ),
-        backgroundColor: Colors.deepOrange,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(
+            color: Colors.grey,
+            height: 2.0,
+          ),
+        ),
       ),
       body: user == null
           ? const Center(
               child: Text(
                 'Please log in to view your transaction history.',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             )
           : FutureBuilder<List<TransactionModel>>(
@@ -36,14 +46,16 @@ class HistoryScreen extends StatelessWidget {
                   return Center(
                     child: Text(
                       'Error: ${snapshot.error}',
-                      style: const TextStyle(color: Colors.red),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 255, 17, 0)),
                     ),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(
                     child: Text(
                       'No transactions found.',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16, color: Color.fromARGB(255, 0, 0, 0)),
                     ),
                   );
                 } else {
@@ -60,42 +72,64 @@ class HistoryScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.all(10),
+                          contentPadding: const EdgeInsets.all(15),
                           title: Text(
-                            "Transaction ID: ${transaction.id}",
+                            "Transaction",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 18,
+                              color: Color(0xFFD84040),
                             ),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                "Total Price: Rp. ${transaction.totalPrice}",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                              ),
                               const SizedBox(height: 5),
                               Text(
-                                  "Total Price: Rp. ${transaction.totalPrice}"),
-                              const SizedBox(height: 5),
-                              Text("Status: ${transaction.status}"),
+                                "Status: ${transaction.status}",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 "Timestamp: ${DateFormat('yyyy-MM-dd – kk:mm').format(transaction.timestamp)}",
-                                style: const TextStyle(fontSize: 12),
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.black),
                               ),
                               const SizedBox(height: 10),
                               const Text(
                                 "Items:",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 16,
+                                  color: Color(0xFFD84040),
                                 ),
                               ),
                               ...transaction.items.map((item) {
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(
-                                    "Menu ID: ${item['menuId']}, Quantity: ${item['quantity']}, Total: Rp. ${item['total']}",
-                                    style: const TextStyle(fontSize: 14),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Quantity: ${item['quantity']}",
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                      Text(
+                                        "Total: Rp. ${item['total']}",
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                    ],
                                   ),
                                 );
                               }).toList(),
@@ -106,8 +140,7 @@ class HistoryScreen extends StatelessWidget {
                     },
                   );
                 }
-              },
-            ),
+              }),
     );
   }
 }

@@ -9,13 +9,12 @@ class FirestoreService {
 
   // Menambahkan menu baru
   Future<void> addMenu(
-      String name, String description, double price, int stock) async {
+      String name, String description, double price) async {
     try {
       await _db.collection('menus').add({
         'name': name,
         'description': description,
         'price': price,
-        'stock': stock,
         'createdAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -37,13 +36,12 @@ class FirestoreService {
 
   // Memperbarui menu
   Future<void> updateMenu(String id, String name, String description,
-      double price, int stock) async {
+      double price) async {
     try {
       await _db.collection('menus').doc(id).update({
         'name': name,
         'description': description,
         'price': price,
-        'stock': stock,
         'updatedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {

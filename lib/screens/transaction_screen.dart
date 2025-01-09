@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
 import '../models/menu_model.dart';
-import 'receipt_screen.dart'; // Import the receipt screen
+import 'receipt_screen.dart';
 
 class TransactionScreen extends StatefulWidget {
   final MenuModel menu;
@@ -63,76 +63,106 @@ class _TransactionScreenState extends State<TransactionScreen> {
       appBar: AppBar(
         title:
             const Text("Pesanan Anda", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: const Color(0xFFD84040),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: ClipRRect(
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  'assets/images/agor.jpg',
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+              ),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(0.16),
+                    child: Image.asset(
+                      'assets/images/agor.jpg',
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          widget.menu.name,
+                          style: const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          widget.menu.description,
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.black87),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Rp. ${widget.menu.price}",
+                          style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 30),
-            Text(
-              widget.menu.name,
-              style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              widget.menu.description,
-              style: const TextStyle(
-                  fontSize: 16, color: Color.fromARGB(255, 0, 0, 0)),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              "Rp. ${widget.menu.price}",
-              style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove, color: Colors.black),
-                  onPressed: () {
-                    _changeQuantity('-');
-                  },
+            const SizedBox(height: 20),
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove, color: Colors.black),
+                          onPressed: () {
+                            _changeQuantity('-');
+                          },
+                        ),
+                        Text(
+                          _quantity.toString(),
+                          style: const TextStyle(
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 255, 0, 0)),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Colors.black),
+                          onPressed: () {
+                            _changeQuantity('+');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Text(
+                        "Total: Rp. $total",
+                        style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  _quantity.toString(),
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add, color: Colors.black),
-                  onPressed: () {
-                    _changeQuantity('+');
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Center(
-              child: Text(
-                "Total: Rp. $total",
-                style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 0, 0, 0)),
               ),
             ),
             const SizedBox(height: 30),
@@ -140,9 +170,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
+                  backgroundColor: const Color(0xFFD84040),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   textStyle: const TextStyle(fontSize: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
                 onPressed: _processTransaction,
                 child: const Text("Pesan Sekarang",
