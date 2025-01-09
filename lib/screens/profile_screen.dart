@@ -13,15 +13,21 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: const Text(
+        title: const Center(
+          child: Text(
             'Profile',
             style: TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
         ),
-        backgroundColor: primaryColor,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(
+            color: Colors.grey,
+            height: 2.0,
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -31,6 +37,7 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 40),
                 const CircleAvatar(
                   radius: 50,
                   backgroundImage: AssetImage('assets/images/profile.jpg'),
