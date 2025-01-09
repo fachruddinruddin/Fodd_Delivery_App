@@ -40,6 +40,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ),
       );
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pesanan berhasil dicheckout')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to process transaction: $e')));
