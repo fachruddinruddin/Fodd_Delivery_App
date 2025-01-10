@@ -5,20 +5,20 @@ class SQLiteHelper {
   static const String _dbName = 'app_data.db';
   static const int _dbVersion = 1;
 
-  // Table Users
+  // Tabel Users
   static const String tableUsers = 'users';
   static const String columnUserId = 'userId';
   static const String columnUsername = 'username';
   static const String columnEmail = 'email';
 
-  // Table Menus
+  // Tabel Menus
   static const String tableMenus = 'menus';
   static const String columnMenuId = 'menuId';
   static const String columnMenuName = 'name';
   static const String columnMenuDescription = 'description';
   static const String columnMenuPrice = 'price';
 
-  // Table Transactions
+  // Tabel Transactions
   static const String tableTransactions = 'transactions';
   static const String columnTransactionId = 'transactionId';
   static const String columnTransactionUserId = 'userId';
@@ -48,7 +48,7 @@ class SQLiteHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    // Create Users table
+    // Membuat tabel Users
     await db.execute('''
       CREATE TABLE $tableUsers (
         $columnUserId TEXT PRIMARY KEY,
@@ -57,7 +57,7 @@ class SQLiteHelper {
       )
     ''');
 
-    // Create Menus table
+    // Membuat tabel Menus
     await db.execute('''
       CREATE TABLE $tableMenus (
         $columnMenuId TEXT PRIMARY KEY,
@@ -67,7 +67,7 @@ class SQLiteHelper {
       )
     ''');
 
-    // Create Transactions table
+    // Membuat tabel Transactions
     await db.execute('''
       CREATE TABLE $tableTransactions (
         $columnTransactionId TEXT PRIMARY KEY,
@@ -80,7 +80,7 @@ class SQLiteHelper {
     ''');
   }
 
-  // CRUD Methods
+  // Metode CRUD
   Future<void> insertUser(String userId, String username, String email) async {
     Database db = await database;
     await db.insert(
